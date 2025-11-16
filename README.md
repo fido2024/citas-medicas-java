@@ -47,25 +47,25 @@ Los observadores implementados son:
 ## ▶️ Cómo ejecutar el programa
 
 ### **1. Compilar**
-```bash
+
 javac Actividad10Patrones.java
+
 2. Ejecutar
-bash
-Copiar código
+
 java Actividad10Patrones
+
 Requisitos
 Java 8 o superior (funciona correctamente en OpenJDK 25)
 
 No requiere dependencias externas
 
 📁 Archivos principales
-bash
-Copiar código
+
 Actividad10Patrones.java   # Código fuente principal
 README.md                  # Documento actual
-.gitignore                 # Exclusión de archivos innecesarios
+
 ✍️ Autor
-(Escribe aquí tu nombre)
+Fidel Vasquez Carata
 
 📚 Nota
 El proyecto fue desarrollado con fines educativos siguiendo las pautas de la Actividad 10 del curso.
