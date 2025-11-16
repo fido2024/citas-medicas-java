@@ -1,6 +1,6 @@
-# Módulo de Gestión de Citas Médicas (Patrones de Diseño)
+# Módulo de Gestión de Citas Médicas 
 
-Este proyecto corresponde a la Actividad 10 del curso de Arquitectura de Software.  
+  
 El objetivo es demostrar la aplicación práctica de tres patrones de diseño:
 
 - **Factory Method** (patrón creacional)  
@@ -50,23 +50,27 @@ Los observadores implementados son:
 
 javac Actividad10Patrones.java
 
-2. Ejecutar
+### **2. Ejecutar**
 
-java Actividad10Patrones
+    java Actividad10Patrones
 
-Requisitos
+### **Requisitos**
+
 Java 8 o superior (funciona correctamente en OpenJDK 25)
 
 No requiere dependencias externas
 
 📁 Archivos principales
 
-Actividad10Patrones.java   # Código fuente principal
-README.md                  # Documento actual
+Actividad10Patrones.java   
+README.md                  
 
 ✍️ Autor
+
 Fidel Vasquez Carata
 
 📚 Nota
+
 El proyecto fue desarrollado con fines educativos siguiendo las pautas de la Actividad 10 del curso.
+
 Se priorizó la simplicidad, claridad y la correcta aplicación de los patrones de diseño requeridos.
