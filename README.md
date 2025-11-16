@@ -60,16 +60,16 @@ Java 8 o superior (funciona correctamente en OpenJDK 25)
 
 No requiere dependencias externas
 
-📁 Archivos principales
+### 📁 Archivos principales
 
 Actividad10Patrones.java   
 README.md                  
 
-✍️ Autor
+### ✍️ Autor
 
 Fidel Vasquez Carata
 
-📚 Nota
+### 📚 Nota
 
 El proyecto fue desarrollado con fines educativos siguiendo las pautas de la Actividad 10 del curso.
 
