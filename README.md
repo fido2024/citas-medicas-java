@@ -20,7 +20,6 @@ Permite:
 - Agregar observadores que reciben actualizaciones cuando la cita cambia de estado  
 - Añadir funciones extra como enviar SMS o recordatorios por correo electrónico  
 
-El código está escrito en español para facilitar su comprensión y explicación.
 
 ---
 
