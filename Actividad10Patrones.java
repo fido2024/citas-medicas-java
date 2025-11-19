@@ -1,21 +1,22 @@
 // Actividad10Patrones.java
 // Java 8+ (probado en OpenJDK 25)
-// Para Compilar: javac Actividad10Patrones.java
-// y luego Ejecutar:   java Actividad10Patrones
+// Compilar: javac Actividad10Patrones.java
+// Ejecutar: java Actividad10Patrones
 
 import java.util.ArrayList;
 import java.util.List;
 
 /*
- * Implementacion en Java de:
- * - Factory Method (Creacional)
- * - Decorator (Estructural)
- * - Observer (Comportamiento)
+ * Versión simplificada del módulo de Citas:
+ * - Factory Method (creadores reciben datos y tienen crearCita())
+ * - Decorator (NotificacionSMS, RecordatorioEmail)
+ * - Observer (ObservadorPaciente, ObservadorRecepcion)
  *
+ * Objetivo: claridad y facilidad para explicar en el examen.
  */
 
 // ----------------------------
-// Patrón Creacional: Factory Method
+// Clase base: Cita
 // ----------------------------
 abstract class Cita {
     protected String nombrePaciente;
@@ -37,6 +38,7 @@ abstract class Cita {
     }
 
     protected void notificarObservadores() {
+        // copia para evitar ConcurrentModification si un observador modifica la lista
         List<Observador> copia = new ArrayList<>(observadores);
         for (Observador o : copia) {
             o.actualizar(this);
@@ -54,6 +56,9 @@ abstract class Cita {
     public abstract String info();
 }
 
+// ----------------------------
+// Tipos concretos de Cita
+// ----------------------------
 class CitaGeneral extends Cita {
     public CitaGeneral(String nombrePaciente, String horario) {
         super(nombrePaciente, horario);
@@ -79,56 +84,69 @@ class CitaEspecialista extends Cita {
     }
 }
 
-// Creador (Factory Method)
+// ----------------------------
+// Factory Method (simplificado)
+// Cada creador recibe los datos en su constructor y expone crearCita()
+// ----------------------------
 abstract class CreadorCita {
-    public abstract Cita crear(String nombrePaciente, String horario, String... extras);
+    public abstract Cita crearCita();
 }
 
 class CreadorGeneral extends CreadorCita {
+    private final String nombre;
+    private final String horario;
+
+    public CreadorGeneral(String nombre, String horario) {
+        this.nombre = nombre;
+        this.horario = horario;
+    }
+
     @Override
-    public Cita crear(String nombrePaciente, String horario, String... extras) {
-        return new CitaGeneral(nombrePaciente, horario);
+    public Cita crearCita() {
+        return new CitaGeneral(nombre, horario);
     }
 }
 
 class CreadorEspecialista extends CreadorCita {
+    private final String nombre;
+    private final String horario;
+    private final String especialidad;
+
+    public CreadorEspecialista(String nombre, String horario, String especialidad) {
+        this.nombre = nombre;
+        this.horario = horario;
+        this.especialidad = especialidad;
+    }
+
     @Override
-    public Cita crear(String nombrePaciente, String horario, String... extras) {
-        String esp = extras != null && extras.length > 0 ? extras[0] : "General";
-        return new CitaEspecialista(nombrePaciente, horario, esp);
+    public Cita crearCita() {
+        return new CitaEspecialista(nombre, horario, especialidad);
     }
 }
 
 // ----------------------------
-// Patrón Estructural: Decorator
+// Decorator (simplificado)
 // ----------------------------
 abstract class DecoradorCita extends Cita {
-    protected Cita envuelta;
+    protected final Cita envuelta;
 
     public DecoradorCita(Cita envuelta) {
+        // reenvía nombre y horario, pero delega comportamiento en 'envuelta'
         super(envuelta.getNombrePaciente(), envuelta.horario);
         this.envuelta = envuelta;
     }
 
     @Override
-    public void adjuntar(Observador o) {
-        envuelta.adjuntar(o);
-    }
+    public void adjuntar(Observador o) { envuelta.adjuntar(o); }
 
     @Override
-    public void separar(Observador o) {
-        envuelta.separar(o);
-    }
+    public void separar(Observador o) { envuelta.separar(o); }
 
     @Override
-    public void cambiarEstado(String nuevoEstado) {
-        envuelta.cambiarEstado(nuevoEstado);
-    }
+    public void cambiarEstado(String nuevoEstado) { envuelta.cambiarEstado(nuevoEstado); }
 
     @Override
-    public String info() {
-        return envuelta.info();
-    }
+    public String info() { return envuelta.info(); }
 }
 
 class NotificacionSMS extends DecoradorCita {
@@ -137,9 +155,7 @@ class NotificacionSMS extends DecoradorCita {
     }
 
     @Override
-    public String info() {
-        return envuelta.info() + " + Notificación SMS";
-    }
+    public String info() { return envuelta.info() + " + Notificacion SMS"; }
 
     public void enviarSms(String mensaje) {
         System.out.println("[SMS a " + envuelta.getNombrePaciente() + "]: " + mensaje);
@@ -152,9 +168,7 @@ class RecordatorioEmail extends DecoradorCita {
     }
 
     @Override
-    public String info() {
-        return envuelta.info() + " + Recordatorio por email";
-    }
+    public String info() { return envuelta.info() + " + Recordatorio por email"; }
 
     public void enviarEmail(String mensaje) {
         System.out.println("[Email a " + envuelta.getNombrePaciente() + "]: " + mensaje);
@@ -162,7 +176,7 @@ class RecordatorioEmail extends DecoradorCita {
 }
 
 // ----------------------------
-// Patrón de Comportamiento: Observer
+// Observer (simplificado)
 // ----------------------------
 interface Observador {
     void actualizar(Cita sujeto);
@@ -171,7 +185,7 @@ interface Observador {
 class ObservadorPaciente implements Observador {
     @Override
     public void actualizar(Cita sujeto) {
-        System.out.println("(Paciente) " + sujeto.getNombrePaciente() + ", su cita ahora está: " + sujeto.getEstado());
+        System.out.println("(Paciente) " + sujeto.getNombrePaciente() + ", su cita ahora esta: " + sujeto.getEstado());
     }
 }
 
@@ -183,51 +197,49 @@ class ObservadorRecepcion implements Observador {
 }
 
 // ----------------------------
-// ejecucion por terminal
+// Demo - main (muy simple)
 // ----------------------------
 public class Actividad10Patrones {
     public static void main(String[] args) {
-        System.out.println("::: Reservas de Citas con Patrones ::: \n");
-        // Creadores (Factory Method)
-        CreadorCita creadorGeneral = new CreadorGeneral();
-        CreadorCita creadorEsp = new CreadorEspecialista();
+        System.out.println("=== Reservas de Citas con Patrones ===");
 
-        // Creamos citas
-        Cita citaA = creadorGeneral.crear("Lucia Rivas", "2025-11-27 09:30");
-        Cita citaB = creadorEsp.crear("Esteban Morales", "2025-11-28 14:00", "Neurologia");
+        // Factory: creadores reciben datos y crean la instancia con crearCita()
+        CreadorCita creadorA = new CreadorGeneral("Mariana Diaz", "2025-11-20 10:00");
+        CreadorCita creadorB = new CreadorEspecialista("Roberto Cruz", "2025-11-21 15:30", "Dermatologia");
 
-        // Adjuntar observadores (Observer)
+        Cita cita1 = creadorA.crearCita();
+        Cita cita2 = creadorB.crearCita();
+
+        // Observer: registrar observadores simples
         Observador paciente = new ObservadorPaciente();
         Observador recepcion = new ObservadorRecepcion();
 
-        citaA.adjuntar(paciente);
-        citaA.adjuntar(recepcion);
+        cita1.adjuntar(paciente);
+        cita1.adjuntar(recepcion);
 
-        citaB.adjuntar(paciente);
-        citaB.adjuntar(recepcion);
+        cita2.adjuntar(paciente);
+        cita2.adjuntar(recepcion);
 
-        // Aplicar decoradores (Decorator)
-        citaA = new NotificacionSMS(citaA);
-        citaB = new RecordatorioEmail(citaB);
+        // Decorator: añadir comportamiento por instancia (sms/email)
+        cita1 = new NotificacionSMS(cita1);
+        cita2 = new RecordatorioEmail(cita2);
 
-        // Aca se muestra la informacion inicial
-        System.out.println(citaA.info());
-        System.out.println(citaB.info());
+        // Mostrar info inicial
+        System.out.println(cita1.info());
+        System.out.println(cita2.info());
         System.out.println();
 
-        // Cambiar estados -> se notifica automaticamente
+        // Cambiar estado -> notifican observadores y luego usamos el decorador
         System.out.println("-- Confirmando la primera cita --");
-        citaA.cambiarEstado("confirmada");
-
-        if (citaA instanceof NotificacionSMS) {
-            ((NotificacionSMS) citaA).enviarSms("Su cita ha sido confirmada. Por favor, llegue 10 min antes.");
+        cita1.cambiarEstado("confirmada");
+        if (cita1 instanceof NotificacionSMS) {
+            ((NotificacionSMS) cita1).enviarSms("Su cita ha sido confirmada. Por favor llegue 10 minutos antes.");
         }
 
         System.out.println("\n-- Cancelando la segunda cita --");
-        citaB.cambiarEstado("cancelada");
-
-        if (citaB instanceof RecordatorioEmail) {
-            ((RecordatorioEmail) citaB).enviarEmail("Lamentamos informarle que su cita ha sido cancelada. Contactenos para reprogramar.");
+        cita2.cambiarEstado("cancelada");
+        if (cita2 instanceof RecordatorioEmail) {
+            ((RecordatorioEmail) cita2).enviarEmail("Su cita ha sido cancelada. Contacte para reprogramar.");
         }
     }
 }
