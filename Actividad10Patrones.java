@@ -1,22 +1,19 @@
 // Actividad10Patrones.java
 // Java 8+ (probado en OpenJDK 25)
-// Compilar: javac Actividad10Patrones.java
-// Ejecutar: java Actividad10Patrones
+// Para Compilar: javac Actividad10Patrones.java
+// Para Ejecutar: java Actividad10Patrones
 
 import java.util.ArrayList;
 import java.util.List;
 
 /*
- * Versión simplificada del módulo de Citas:
  * - Factory Method (creadores reciben datos y tienen crearCita())
  * - Decorator (NotificacionSMS, RecordatorioEmail)
  * - Observer (ObservadorPaciente, ObservadorRecepcion)
- *
- * Objetivo: claridad y facilidad para explicar en el examen.
  */
 
-// ----------------------------
-// Clase base: Cita
+// ---------------------------- 
+//  Patron Creacional: Factory Method (Clase Base Cita) 
 // ----------------------------
 abstract class Cita {
     protected String nombrePaciente;
@@ -57,7 +54,7 @@ abstract class Cita {
 }
 
 // ----------------------------
-// Tipos concretos de Cita
+// Tipos de Cita
 // ----------------------------
 class CitaGeneral extends Cita {
     public CitaGeneral(String nombrePaciente, String horario) {
@@ -85,8 +82,7 @@ class CitaEspecialista extends Cita {
 }
 
 // ----------------------------
-// Factory Method (simplificado)
-// Cada creador recibe los datos en su constructor y expone crearCita()
+// Factory Method (Creador)
 // ----------------------------
 abstract class CreadorCita {
     public abstract Cita crearCita();
@@ -125,7 +121,7 @@ class CreadorEspecialista extends CreadorCita {
 }
 
 // ----------------------------
-// Decorator (simplificado)
+// Patron Decorator
 // ----------------------------
 abstract class DecoradorCita extends Cita {
     protected final Cita envuelta;
@@ -176,7 +172,7 @@ class RecordatorioEmail extends DecoradorCita {
 }
 
 // ----------------------------
-// Observer (simplificado)
+// Patron Observer
 // ----------------------------
 interface Observador {
     void actualizar(Cita sujeto);
@@ -197,7 +193,7 @@ class ObservadorRecepcion implements Observador {
 }
 
 // ----------------------------
-// Demo - main (muy simple)
+// Ejecucion por Terminal
 // ----------------------------
 public class Actividad10Patrones {
     public static void main(String[] args) {
@@ -220,11 +216,11 @@ public class Actividad10Patrones {
         cita2.adjuntar(paciente);
         cita2.adjuntar(recepcion);
 
-        // Decorator: añadir comportamiento por instancia (sms/email)
+        // Decorator: agrega comportamiento por instancia (sms/email)
         cita1 = new NotificacionSMS(cita1);
         cita2 = new RecordatorioEmail(cita2);
 
-        // Mostrar info inicial
+        // Mostrar informacion inicial
         System.out.println(cita1.info());
         System.out.println(cita2.info());
         System.out.println();
